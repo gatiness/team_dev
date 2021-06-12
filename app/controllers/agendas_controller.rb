@@ -1,3 +1,4 @@
+
 class AgendasController < ApplicationController
   # before_action :set_agenda, only: %i[show edit update destroy]
 
@@ -6,20 +7,6 @@ class AgendasController < ApplicationController
 
   def index
     @agendas = Agenda.all
-  end
-
-  def destroy 
-    path = Rails.application.routes.recognize_path(request.referer)
-    @team = @agenda.team
-    @users = @team.members
-
-    if current_user.id == @agenda.user_id || current_user.id == @team.owner_id
-      @agenda.destroy
-      AssignMailer.delete_agenda_mail(@users).deliver
-      redirect_to dashboard_path
-    else
-      redirect_to path
-    end
   end
 
   def new
@@ -35,8 +22,21 @@ class AgendasController < ApplicationController
     if current_user.save && @agenda.save
       redirect_to dashboard_url, notice: I18n.t('views.messages.create_agenda') 
     else
-      render :new
       # render :new
+      redirect_to path
+    end
+  end
+
+  def destroy 
+    path = Rails.application.routes.recognize_path(request.referer)
+    @team = @agenda.team
+    @users = @team.members
+
+    if current_user.id == @agenda.user_id || current_user.id == @team.owner_id
+      @agenda.destroy
+      AssignMailer.delete_agenda_mail(@users).deliver
+      redirect_to dashboard_path
+    else
       redirect_to path
     end
   end
