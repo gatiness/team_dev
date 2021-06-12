@@ -56,6 +56,15 @@ class TeamsController < ApplicationController
     end
   end
 
+  def change_owner
+    if @team.update(owner_params)
+      AssignMailer.changed_owner_mail(@team.owner.email).deliver
+      redirect_to @team
+    else
+      render @team
+    end
+  end
+
   private
 
   def set_team
