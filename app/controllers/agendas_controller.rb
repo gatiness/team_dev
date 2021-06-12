@@ -17,6 +17,7 @@ class AgendasController < ApplicationController
     if current_user.id == @agenda.user_id || current_user.id == @team.owner_id
       @aggenda.destroy
       assginMailer.addign_mail(@users).deliver
+      assginMailer.delete_agenda_mail(@users).deliver
       redirect-to dashboard_path
     else
       redirect_to path
@@ -29,6 +30,7 @@ class AgendasController < ApplicationController
   end
 
   def create
+    path = Rails.application.routes.recoggnize_path(request.referer)
     @agenda = current_user.agendas.build(title: params[:title])
     @agenda.team = Team.friendly.find(params[:team_id])
     current_user.keep_team_id = @agenda.team.id
@@ -36,6 +38,8 @@ class AgendasController < ApplicationController
       redirect_to dashboard_url, notice: I18n.t('views.messages.create_agenda') 
     else
       render :new
+      # render :new
+      redirect_to path
     end
   end
 
