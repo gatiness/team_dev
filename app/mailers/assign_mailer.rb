@@ -6,23 +6,19 @@ class AssignMailer < ApplicationMailer
     @password = password
     mail to: @email, subject: I18n.t('views.messages.complete_registration')
   end
-  # def assign_mail(email, password)
-  #   @email = email
-  #   @password = password
-  #   mail to: @email, subject: I18n.t('views.messages.complete_registration')
+  # def assign_mail(users)    
+  #   @email = users.pluck(:email)
+  #   #mail to: @email.join(","), subject: I18n.t('views.messages.complete_registration')
+  #   #mail to: users.map(&:email).join(","), subject: I18n.t('views.messages.complete_registration')
+  #   mail to: @email.split(","), subject: I18n.t('views.messages.complete_registration')    
   # end
-  def assign_mail(users)
-
-  def assign_mail(email, password)
-    @email = email
-    @password = password
-    mail to: @email, subject: I18n.t('views.messages.complete_registration')
-  end
-  def delete_agenda_mail(users)
+  def delete_agenda_mail(users)    
     @email = users.pluck(:email)
-    mail to: @email.split(","), subject: I18n.t('views.messages.complete_registration')
+    #mail to: @email.join(","), subject: I18n.t('views.messages.complete_registration')
+    #mail to: users.map(&:email).join(","), subject: I18n.t('views.messages.complete_registration')
+    mail to: @email.split(","), subject: I18n.t('views.messages.complete_registration')    
   end
   def changed_owner_mail(email)
-    mail to: email, subject: I18n.t('views.messages.complete_registration') 
+    mail to: email, subject: I18n.t('views.messages.complete_registration')
   end
 end
